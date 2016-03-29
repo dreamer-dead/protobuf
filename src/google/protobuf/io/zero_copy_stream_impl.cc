@@ -57,6 +57,8 @@ namespace io {
 // Win32 lseek is broken:  If invoked on a non-seekable file descriptor, its
 // return value is undefined.  We re-define it to always produce an error.
 #define lseek(fd, offset, origin) ((off_t)-1)
+
+using off_t = _off_t;
 #endif
 
 namespace {

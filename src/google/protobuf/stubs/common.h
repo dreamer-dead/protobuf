@@ -48,6 +48,10 @@
 #include <stdint.h>
 #endif
 
+#if defined(_WIN32) && __STDC__
+#include <io.h>
+#endif
+
 #ifndef PROTOBUF_USE_EXCEPTIONS
 #if defined(_MSC_VER) && defined(_CPPUNWIND)
   #define PROTOBUF_USE_EXCEPTIONS 1
@@ -1222,5 +1226,25 @@ using namespace std;  // Don't do this at home, kids.
 
 }  // namespace protobuf
 }  // namespace google
+
+#if defined(_WIN32) && __STDC__
+inline int write(int _FileHandle, void const* _Buf, unsigned int _MaxCharCount) {
+  return _write(_FileHandle, _Buf, _MaxCharCount);
+}
+
+inline int read(int _FileHandle, void* _DstBuf, unsigned int _MaxCharCount) {
+  return _read(_FileHandle, _DstBuf, _MaxCharCount);
+}
+
+inline int open(char const* _FileName, int _OpenFlag) {
+  return _open(_FileName, _OpenFlag);
+}
+
+inline int access(char const* _FileName, int _AccessMode) {
+  return _access(_FileName, _AccessMode);
+}
+
+inline int close(int _FileHandle) { return _close(_FileHandle); }
+#endif  // defined(_WIN32) && __STDC__
 
 #endif  // GOOGLE_PROTOBUF_COMMON_H__

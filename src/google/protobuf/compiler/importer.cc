@@ -464,7 +464,7 @@ io::ZeroCopyInputStream* DiskSourceTree::OpenDiskFile(
     const string& filename) {
   int file_descriptor;
   do {
-    file_descriptor = open(filename.c_str(), O_RDONLY);
+    file_descriptor = open(filename.c_str(), _O_RDONLY);
   } while (file_descriptor < 0 && errno == EINTR);
   if (file_descriptor >= 0) {
     io::FileInputStream* result = new io::FileInputStream(file_descriptor);
