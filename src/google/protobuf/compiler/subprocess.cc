@@ -52,6 +52,8 @@ namespace compiler {
 
 #ifdef _WIN32
 
+#define strdup(str) _strdup(str)
+
 static void CloseHandleOrDie(HANDLE handle) {
   if (!CloseHandle(handle)) {
     GOOGLE_LOG(FATAL) << "CloseHandle: "
@@ -158,7 +160,7 @@ bool Subprocess::Communicate(const Message& input, Message* output,
   int input_pos = 0;
 
   while (child_stdout_ != NULL) {
-    HANDLE handles[2];
+    HANDLE handles[2] = {NULL, NULL};
     int handle_count = 0;
 
     if (child_stdin_ != NULL) {
@@ -171,7 +173,7 @@ bool Subprocess::Communicate(const Message& input, Message* output,
     DWORD wait_result =
         WaitForMultipleObjects(handle_count, handles, FALSE, INFINITE);
 
-    HANDLE signaled_handle;
+    HANDLE signaled_handle = NULL;
     if (wait_result >= WAIT_OBJECT_0 &&
         wait_result < WAIT_OBJECT_0 + handle_count) {
       signaled_handle = handles[wait_result - WAIT_OBJECT_0];

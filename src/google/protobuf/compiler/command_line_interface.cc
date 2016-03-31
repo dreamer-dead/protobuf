@@ -75,7 +75,8 @@ namespace protobuf {
 namespace compiler {
 
 #if defined(_WIN32)
-#define mkdir(name, mode) mkdir(name)
+#define mkdir(name, mode) _mkdir(name)
+#define open(path, mode, perm) open(path, mode)
 #ifndef W_OK
 #define W_OK 02  // not defined by MSVC for whatever reason
 #endif
@@ -96,6 +97,12 @@ namespace compiler {
 #else
 #define O_BINARY 0     // If this isn't defined, the platform doesn't need it.
 #endif
+#endif
+
+#if defined(_WIN32) && !defined(__CYGWIN__)
+#define O_WRONLY _O_WRONLY
+#define O_CREAT _O_CREAT
+#define O_TRUNC _O_TRUNC
 #endif
 
 namespace {
